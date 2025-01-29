@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exclusive Content</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            max-width: 600px;
+            margin: auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Welcome Section -->
+    <div class="container" id="welcomeSection">
+        <h1>Welcome to Exclusive Content</h1>
+        <button class="btn" onclick="showSection('plansSection')">Open</button>
+    </div>
+
+    <!-- Plans Section -->
+    <div class="container hidden" id="plansSection">
+        <h2>Choose Your Plan</h2>
+        <div class="plan">
+            <h3>Basic Plan</h3>
+            <p>₹299</p>
+            <button class="btn" onclick="selectPlan('Basic', 299)">Select Basic Plan</button>
+        </div>
+        <div class="plan">
+            <h3>Premium Plan</h3>
+            <p>₹429</p>
+            <button class="btn" onclick="selectPlan('Premium', 429)">Select Premium Plan</button>
+        </div>
+    </div>
+
+    <!-- Razorpay Button Section -->
+    <div class="container hidden" id="razorpaySection">
+        <h2>Choose Payment Method</h2>
+        <p><strong>Selected Plan:</strong> <span id="selectedPlan"></span></p>
+        <p><strong>Price:</strong> ₹<span id="selectedPrice"></span></p>
+        
+        <!-- Razorpay Button for Basic Plan -->
+        <form id="basicPlanForm" class="hidden">
+            <script src="https://checkout.razorpay.com/v1/payment-button.js"
+                data-payment_button_id="pl_Pp92rDCRCTbiIu" async>
+            </script>
+        </form>
+        
+        <!-- Razorpay Button for Premium Plan -->
+        <form id="premiumPlanForm" class="hidden">
+            <script src="https://checkout.razorpay.com/v1/payment-button.js"
+                data-payment_button_id="pl_Pp9ddB1hSfbjhN" async>
+            </script>
+        </form>
+    </div>
+
+    <script>
+        let selectedPlan = "";
+        let planAmount = 0;
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.getElementById('welcomeSection').classList.add('hidden');
+            document.getElementById('plansSection').classList.add('hidden');
+            document.getElementById('razorpaySection').classList.add('hidden');
+            
+            // Show the selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        function selectPlan(plan, amount) {
+            selectedPlan = plan;
+            planAmount = amount;
+            document.getElementById('selectedPlan').innerText = plan;
+            document.getElementById('selectedPrice').innerText = amount;
+            showSection('razorpaySection');
+            
+            // Show the respective Razorpay button
+            if (plan === 'Basic') {
+                document.getElementById('basicPlanForm').classList.remove('hidden');
+                document.getElementById('premiumPlanForm').classList.add('hidden');
+            } else if (plan === 'Premium') {
+                document.getElementById('premiumPlanForm').classList.remove('hidden');
+                document.getElementById('basicPlanForm').classList.add('hidden');
+            }
+        }
+
+        // Add a handler to redirect the user to Telegram after successful payment
+        function paymentSuccessHandler() {
+            window.location.href = "https://t.me/+MzxsJB4oDlNjMGRl";
+        }
+
+        // Listen for successful payment
+        window.addEventListener('payment.success', paymentSuccessHandler);
+
+    </script>
+
+</body>
+</html>
